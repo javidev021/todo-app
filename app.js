@@ -3,58 +3,76 @@ const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 
-// 🔹 Cargar tareas guardadas al iniciar
+// Cargar tareas al iniciar
 document.addEventListener("DOMContentLoaded", loadTasks);
 
-// 🔹 Agregar tarea
+// Agregar nueva tarea
 addTaskBtn.addEventListener("click", () => {
   const taskText = taskInput.value.trim();
   if (taskText === "") return;
 
-  addTask(taskText);
-  saveTask(taskText);
+  const newTask = { text: taskText, completed: false };
+  addTask(newTask);
+  saveTask(newTask);
 
   taskInput.value = "";
 });
 
-// 🔹 Agregar tarea al DOM
-function addTask(taskText) {
+// Agregar tarea al DOM
+function addTask(task) {
   const li = document.createElement("li");
+  if (task.completed) li.classList.add("completed");
+
   li.innerHTML = `
-    <span>${taskText}</span>
+    <span>${task.text}</span>
     <button>Eliminar</button>
   `;
+
+  // Marcar como completada
+  li.querySelector("span").addEventListener("click", () => {
+    li.classList.toggle("completed");
+    toggleTaskStatus(task.text);
+  });
 
   // Eliminar tarea
   li.querySelector("button").addEventListener("click", () => {
     li.remove();
-    deleteTask(taskText);
+    deleteTask(task.text);
   });
 
   taskList.appendChild(li);
 }
 
-// 🔹 Guardar tarea en localStorage
-function saveTask(taskText) {
+// Guardar tarea
+function saveTask(task) {
   const tasks = getTasks();
-  tasks.push(taskText);
+  tasks.push(task);
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// 🔹 Obtener tareas guardadas
+// Obtener tareas
 function getTasks() {
   const tasks = localStorage.getItem("tasks");
   return tasks ? JSON.parse(tasks) : [];
 }
 
-// 🔹 Cargar tareas al inicio
+// Cargar tareas al inicio
 function loadTasks() {
   const tasks = getTasks();
   tasks.forEach(addTask);
 }
 
-// 🔹 Eliminar tarea del localStorage
+// Eliminar tarea
 function deleteTask(taskText) {
-  const tasks = getTasks().filter((t) => t !== taskText);
+  const tasks = getTasks().filter((t) => t.text !== taskText);
   localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// Cambiar estado de completado
+function toggleTaskStatus(taskText) {
+  const tasks = getTasks();
+  const updatedTasks = tasks.map((t) =>
+    t.text === taskText ? { ...t, completed: !t.completed } : t
+  );
+  localStorage.setItem("tasks", JSON.stringify(updatedTasks));
 }

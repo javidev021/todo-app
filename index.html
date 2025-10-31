@@ -7,33 +7,16 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="container">
-    <h1>Mis Tareas</h1>
+  <div class="container">
+    <h1>📝 Lista de Tareas</h1>
+    <div class="input-group">
+      <input type="text" id="taskInput" placeholder="Escribe una tarea..." />
+      <button id="addTaskBtn">Agregar</button>
+    </div>
+    <ul id="taskList"></ul>
+  </div>
 
-    <form id="task-form" class="task-form" aria-label="Agregar tarea">
-      <input id="task-input" type="text" placeholder="Escribe una tarea y presiona Enter" aria-label="Nueva tarea" required />
-      <button type="submit">Agregar</button>
-    </form>
-
-    <section class="controls">
-      <div>
-        <label for="filter">Filtrar:</label>
-        <select id="filter" aria-label="Filtrar tareas">
-          <option value="all">Todas</option>
-          <option value="active">Activas</option>
-          <option value="completed">Completadas</option>
-        </select>
-      </div>
-      <button id="clear-completed">Borrar completadas</button>
-    </section>
-
-    <ul id="task-list" class="task-list" aria-live="polite"></ul>
-
-    <footer class="footer">
-      <span id="remaining"></span>
-    </footer>
-  </main>
-
-  <script type="module" src="app.js"></script>
+  <script src="app.js"></script>
 </body>
+
 </html>
